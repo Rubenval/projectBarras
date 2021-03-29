@@ -10,17 +10,15 @@ namespace CalcVencimento.Classes
         public DateTime Emissao { get; set; }
         public double ValorParc { get; set; }
         public DateTime Vencto { get; set; }
-        public int Fator { get; set; }
-        
 
-        public Parcelas(int numParc, string nrDuplic, DateTime emissao, double valorParc, DateTime vencto, int fator)
+
+        public Parcelas(int numParc, string nrDuplic, DateTime emissao, double valorParc, DateTime vencto)
         {
             NumParc = numParc;
             NrDuplic = nrDuplic;
             Emissao = emissao;
             ValorParc = valorParc;
             Vencto = vencto;
-            Fator = fator;
         }
 
         public Parcelas()
@@ -38,9 +36,7 @@ namespace CalcVencimento.Classes
                 + " R$ "
                 + ValorParc.ToString("f2", CultureInfo.InvariantCulture)
                 + " - "
-                + Vencto.ToShortDateString()
-                + " - Fator Vencimento: "
-                + Fator;
+                + Vencto.ToShortDateString();
         }
     }
 }

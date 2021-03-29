@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+//using System.Collections.Generic;
 using CalcVencimento.Classes;
 using System.Globalization;
 
@@ -12,18 +12,18 @@ namespace CalcVencimento
             Parcelas[] parcels;
             BarrasLinhas[] barraselinhas;
             BarrasLinhas b = new BarrasLinhas();
-            DateTime vencto;
+            DateTime vencto, vencto2;
             int ano, mes, dia;
-            DateTime vencto2;
             DateTime emis = DateTime.Today;
-            DateTime dtBase = new DateTime(1997, 7, 17);
-            int nparc, nrInParc, fator;
+            DateTime dtBase = new DateTime(1997, 10, 7);
+            int nparc, nrInParc, codcli, fator;
             int digbarra, dignnum;
             double vlParc;
             string nrDuplic;
             string[] scan;
             int const1 = 1, const2 = 4;
             string cedt = "3052540", nbanco = "104", moeda = "9";
+            string nossnum, strvl, strbarra; string res;
 
 
             string menu = "SELECIONE SUA OPÇÃO:\n" +
@@ -36,107 +36,149 @@ namespace CalcVencimento
                 ":=> ";
             Console.Write(menu);
             int op = int.Parse(Console.ReadLine());
+
             while (op != 6)
             {
+                if (op != 6) { res = "S"; } else { res = "N"; }
                 switch (op)
                 {
                     case 1:
-                        Console.WriteLine("GERAR PARCELAS\n");
-                        Console.Write("Primeiro Vencimento: ");
-                        scan = Console.ReadLine().Split('/');
-                        ano = int.Parse(scan[2]);
-                        mes = int.Parse(scan[1]);
-                        dia = int.Parse(scan[0]);
-                        vencto = new DateTime(ano, mes, dia);
-
-                        Console.Write("Informe o número de parcelas: ");
-                        nparc = int.Parse(Console.ReadLine());
-                        parcels = new Parcelas[nparc];
-                        Console.Write("Número Inicial da Parcela: ");
-                        nrInParc = int.Parse(Console.ReadLine());
-                        Console.Write("Valor das Parcelas: R$ ");
-                        vlParc = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
-
-                        for (int i = 0; i < nparc; i++)
+                        while (res == "S")
                         {
-                            if (i == 0)
-                            {
-                                nrInParc += 0;
-                                nrDuplic = "PP" + nrInParc.ToString("00") + "PP";
-                                vencto2 = vencto.AddMonths(i);
-                                fator = (vencto2 - dtBase).Days;
-                                parcels[i] = new Parcelas(nrInParc, nrDuplic, emis, vlParc, vencto2, fator);
-                            }
-                            else
-                            {
-                                nrInParc += 1;
-                                nrDuplic = "PP" + nrInParc.ToString("00") + "PP";
-                                vencto2 = vencto.AddMonths(i);
-                                fator = (vencto2 - dtBase).Days;
-                                parcels[i] = new Parcelas(nrInParc, nrDuplic, emis, vlParc, vencto2, fator);
-                            }
-                        }
+                            Console.WriteLine("GERAR PARCELAS\n");
+                            Console.Write("Primeiro Vencimento: ");
+                            scan = Console.ReadLine().Split('/');
+                            ano = int.Parse(scan[2]);
+                            mes = int.Parse(scan[1]);
+                            dia = int.Parse(scan[0]);
+                            vencto = new DateTime(ano, mes, dia);
 
-                        foreach (object obj in parcels)
-                        {
-                            Console.WriteLine(obj);
+                            Console.Write("Informe o número de parcelas: ");
+                            nparc = int.Parse(Console.ReadLine());
+                            parcels = new Parcelas[nparc];
+                            Console.Write("Número Inicial da Parcela: ");
+                            nrInParc = int.Parse(Console.ReadLine());
+                            Console.Write("Valor das Parcelas: R$ ");
+                            vlParc = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+
+                            for (int i = 0; i < nparc; i++)
+                            {
+                                if (i == 0)
+                                {
+                                    nrInParc += 0;
+                                    nrDuplic = "PP" + nrInParc.ToString("00") + "PP";
+                                    vencto2 = vencto.AddMonths(i);
+                                    parcels[i] = new Parcelas(nrInParc, nrDuplic, emis, vlParc, vencto2);
+                                }
+                                else
+                                {
+                                    nrInParc += 1;
+                                    nrDuplic = "PP" + nrInParc.ToString("00") + "PP";
+                                    vencto2 = vencto.AddMonths(i);
+                                    parcels[i] = new Parcelas(nrInParc, nrDuplic, emis, vlParc, vencto2);
+                                }
+                            }
+
+                            foreach (object obj in parcels)
+                            {
+                                Console.WriteLine(obj);
+                            }
+                            Console.ReadKey();
+
+                            Console.Write("Gerar novas parcelas? ");
+                            res = Console.ReadLine().ToUpper();
+                            Console.Clear();
                         }
-                        Console.ReadKey();
                         break;
                     case 2:
-                        Console.WriteLine("GERAR BARRAS E LINHAS\n");
-                        Console.Write("Primeiro Vencimento: ");
-                        scan = Console.ReadLine().Split('/');
-                        ano = int.Parse(scan[2]);
-                        mes = int.Parse(scan[1]);
-                        dia = int.Parse(scan[0]);
-                        vencto = new DateTime(ano, mes, dia);
-                        string nossnum;
-
-                        Console.Write("Informe o número de parcelas: ");
-                        nparc = int.Parse(Console.ReadLine());
-                        barraselinhas = new BarrasLinhas[nparc];
-                        Console.Write("Número Inicial da Parcela: ");
-                        nrInParc = int.Parse(Console.ReadLine());
-                        Console.Write("Valor das Parcelas: R$ ");
-                        vlParc = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
-                        string strvl = b.VConv(vlParc);
-                        Console.Write("Código do cliente: ");
-                        int codcli = int.Parse(Console.ReadLine());
-
-
-                        for (int i = 0; i < nparc; i++)
+                        while (res == "S")
                         {
-                            if (i == 0)
+                            Console.WriteLine("GERAR BARRAS E LINHAS\n");
+                            Console.Write("Primeiro Vencimento: ");
+                            scan = Console.ReadLine().Split('/');
+                            ano = int.Parse(scan[2]);
+                            mes = int.Parse(scan[1]);
+                            dia = int.Parse(scan[0]);
+                            vencto = new DateTime(ano, mes, dia);
+
+
+                            Console.Write("Informe o número de parcelas: ");
+                            nparc = int.Parse(Console.ReadLine());
+                            barraselinhas = new BarrasLinhas[nparc];
+                            Console.Write("Número Inicial da Parcela: ");
+                            nrInParc = int.Parse(Console.ReadLine());
+                            Console.Write("Valor das Parcelas: R$ ");
+                            vlParc = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+                            strvl = b.VConv(vlParc);
+                            Console.Write("Código do cliente: ");
+                            codcli = int.Parse(Console.ReadLine());
+
+
+                            for (int i = 0; i < nparc; i++)
                             {
-                                nrInParc += 0;
-                                nossnum = b.NNum(const1,const2, codcli,nrInParc);
-                                dignnum = b.Dig11(cedt, nossnum);
-                                digbarra = b.Dig11(cedt + nossnum);
-                                vencto2 = vencto.AddMonths(i);
-                                fator = (vencto2 - dtBase).Days;
-                                barraselinhas[i] = new BarrasLinhas(nbanco, moeda, digbarra.ToString(), fator.ToString(), strvl, cedt, nossnum, dignnum.ToString());
+                                if (i == 0)
+                                {
+                                    nrInParc += 0;
+                                    nossnum = b.NNum(const1, const2, codcli, nrInParc);
+                                    dignnum = b.Dig11(cedt, nossnum);
+                                    vencto2 = vencto.AddMonths(i);
+                                    fator = (vencto2 - dtBase).Days;
+                                    strbarra = nbanco + moeda + fator.ToString() + strvl + cedt + nossnum + dignnum;
+                                    digbarra = b.Dig11(strbarra);
+                                    strbarra = strbarra.Substring(0, 4) + digbarra + strbarra.Substring(4) + dignnum;
+                                    barraselinhas[i] = new BarrasLinhas(nbanco, moeda, digbarra.ToString(), fator.ToString(), strvl, cedt, nossnum, dignnum.ToString(), strbarra);
+                                }
+                                else
+                                {
+                                    nrInParc += 1;
+                                    nossnum = b.NNum(const1, const2, codcli, nrInParc);
+                                    dignnum = b.Dig11(cedt, nossnum);
+                                    vencto2 = vencto.AddMonths(i);
+                                    fator = (vencto2 - dtBase).Days;
+                                    strbarra = nbanco + moeda + fator.ToString() + strvl + cedt + nossnum + dignnum;
+                                    digbarra = b.Dig11(strbarra);
+                                    strbarra = strbarra.Substring(0, 4) + digbarra + strbarra.Substring(4) + dignnum;
+                                    barraselinhas[i] = new BarrasLinhas(nbanco, moeda, digbarra.ToString(), fator.ToString(), strvl, cedt, nossnum, dignnum.ToString(), strbarra);
+                                }
                             }
-                            else
+                            foreach (object bars in barraselinhas)
+                            {
+                                Console.WriteLine(bars);
+                            }
+                            Console.ReadKey();
+                            Console.Write("Gerar novos boletos? ");
+                            res = Console.ReadLine().ToUpper();
+                            Console.Clear();
+                        }
+                        break;
+                    case 3:
+                        while (res == "S")
+                        {
+                            Console.WriteLine("CONFERE DIGITO\n");
+                            Console.Write("Informe o número de parcelas: ");
+                            nparc = int.Parse(Console.ReadLine());
+                            barraselinhas = new BarrasLinhas[nparc];
+                            Console.Write("Número Inicial da Parcela: ");
+                            nrInParc = int.Parse(Console.ReadLine());
+                            Console.Write("Valor das Parcelas: R$ ");
+                            vlParc = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+                            strvl = b.VConv(vlParc);
+                            Console.Write("Código do cliente: ");
+                            codcli = int.Parse(Console.ReadLine());
+                            for (int i = 0; i < nparc; i++)
                             {
                                 nrInParc += 1;
                                 nossnum = b.NNum(const1, const2, codcli, nrInParc);
-                                dignnum = b.Dig11(cedt, nossnum);
-                                Console.WriteLine("->> " + cedt + nossnum);
-                                digbarra = b.Dig11(cedt + nossnum);
-                                vencto2 = vencto.AddMonths(i);
-                                fator = (vencto2 - dtBase).Days;
-                                barraselinhas[i] = new BarrasLinhas(nbanco, moeda, digbarra.ToString(), fator.ToString(), strvl, cedt, nossnum, dignnum.ToString());
+                                dignnum = b.Dig11("104985750000007000305254000010004001899749");//const1, const2, codcli, nrInParc); // cedt, nossnum);
+                                //barraselinhas[i] = new BarrasLinhas(nossnum, dignnum.ToString());
+                                Console.WriteLine(dignnum);
+
                             }
-                            //Console.WriteLine(barraselinhas[i].ToString());
+                            Console.ReadKey();
+                            Console.Write("Novo Teste? ");
+                            res = Console.ReadLine().ToUpper();
+                            Console.Clear();
                         }
-                        foreach (object bars in barraselinhas)
-                        {
-                            Console.WriteLine(bars);
-                        }
-                        Console.ReadKey();
-                        break;
-                    case 3:
                         break;
                     case 4:
                         break;
