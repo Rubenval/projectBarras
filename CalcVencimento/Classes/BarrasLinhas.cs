@@ -190,7 +190,7 @@ namespace CalcVencimento.Classes
         {
             return "Component." + NumBanco + CodMoeda + DigBarra + FatorVen + StrValor + Cedente + NossoNum + "." + Dig + ".\n\n" +
                    "CodBarras." + MontaBarra() + "\n" +
-                   "Linha Dig\n " + MontarLinha(StrBarra)+
+                   "Linha Dig\n " + MontarLinha(StrBarra) +
                    "\n";
         }
     }
